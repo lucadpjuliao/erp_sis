@@ -1,0 +1,3 @@
+# ERP_SIS
+
+Projeto base do sistema ERP desenvolvido em Django com PostgreSQL.
