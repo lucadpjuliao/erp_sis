@@ -1,0 +1,209 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block title %}Configurações - Sistema ERP{% endblock %}
+{% block page_title %}Configurações{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row mb-4">
+        <div class="col-12">
+            <h4 class="text-gradient mb-0">Configurações do Sistema</h4>
+            <p class="text-muted">Gerencie as configurações globais do sistema ERP.</p>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Sistema -->
+        <div class="col-lg-6 mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="fas fa-cog text-primary me-2"></i>
+                        Sistema
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="list-group list-group-flush">
+                        <a href="/admin/core/configuracao/" class="list-group-item list-group-item-action">
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-sliders-h text-muted me-3"></i>
+                                <div>
+                                    <h6 class="mb-1">Configurações Gerais</h6>
+                                    <p class="mb-0 text-muted small">Parâmetros globais do sistema</p>
+                                </div>
+                            </div>
+                        </a>
+                        <a href="/admin/" class="list-group-item list-group-item-action">
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-tools text-muted me-3"></i>
+                                <div>
+                                    <h6 class="mb-1">Administração</h6>
+                                    <p class="mb-0 text-muted small">Painel administrativo completo</p>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Usuários e Permissões -->
+        <div class="col-lg-6 mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="fas fa-users text-success me-2"></i>
+                        Usuários e Permissões
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="list-group list-group-flush">
+                        <a href="/admin/auth/user/" class="list-group-item list-group-item-action">
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-user text-muted me-3"></i>
+                                <div>
+                                    <h6 class="mb-1">Usuários</h6>
+                                    <p class="mb-0 text-muted small">Gerenciar usuários do sistema</p>
+                                </div>
+                            </div>
+                        </a>
+                        <a href="/admin/auth/group/" class="list-group-item list-group-item-action">
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-users-cog text-muted me-3"></i>
+                                <div>
+                                    <h6 class="mb-1">Grupos e Permissões</h6>
+                                    <p class="mb-0 text-muted small">Controle de acesso por grupos</p>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Financeiro -->
+        <div class="col-lg-6 mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="fas fa-chart-line text-info me-2"></i>
+                        Módulo Financeiro
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="list-group list-group-flush">
+                        <a href="/admin/financeiro/planocontas/" class="list-group-item list-group-item-action">
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-list text-muted me-3"></i>
+                                <div>
+                                    <h6 class="mb-1">Plano de Contas</h6>
+                                    <p class="mb-0 text-muted small">Estrutura contábil da empresa</p>
+                                </div>
+                            </div>
+                        </a>
+                        <a href="/admin/financeiro/centrocusto/" class="list-group-item list-group-item-action">
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-bullseye text-muted me-3"></i>
+                                <div>
+                                    <h6 class="mb-1">Centros de Custo</h6>
+                                    <p class="mb-0 text-muted small">Departamentos e setores</p>
+                                </div>
+                            </div>
+                        </a>
+                        <a href="/admin/financeiro/banco/" class="list-group-item list-group-item-action">
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-university text-muted me-3"></i>
+                                <div>
+                                    <h6 class="mb-1">Bancos</h6>
+                                    <p class="mb-0 text-muted small">Instituições bancárias</p>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Operacional -->
+        <div class="col-lg-6 mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="fas fa-cogs text-warning me-2"></i>
+                        Módulo Operacional
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="list-group list-group-flush">
+                        <a href="/admin/operacional/categoria/" class="list-group-item list-group-item-action">
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-tags text-muted me-3"></i>
+                                <div>
+                                    <h6 class="mb-1">Categorias</h6>
+                                    <p class="mb-0 text-muted small">Categorias de produtos</p>
+                                </div>
+                            </div>
+                        </a>
+                        <a href="/admin/operacional/unidademedida/" class="list-group-item list-group-item-action">
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-balance-scale text-muted me-3"></i>
+                                <div>
+                                    <h6 class="mb-1">Unidades de Medida</h6>
+                                    <p class="mb-0 text-muted small">Unidades para produtos</p>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Backup e Manutenção -->
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="fas fa-shield-alt text-danger me-2"></i>
+                        Backup e Manutenção
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="text-center p-3">
+                                <i class="fas fa-download fa-2x text-info mb-3"></i>
+                                <h6>Backup dos Dados</h6>
+                                <p class="text-muted small mb-3">Faça backup regular dos dados</p>
+                                <button class="btn btn-outline-info btn-sm" onclick="showNotification('Funcionalidade em desenvolvimento', 'info')">
+                                    <i class="fas fa-download me-1"></i>Gerar Backup
+                                </button>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="text-center p-3">
+                                <i class="fas fa-broom fa-2x text-warning mb-3"></i>
+                                <h6>Limpeza do Sistema</h6>
+                                <p class="text-muted small mb-3">Remova dados temporários</p>
+                                <button class="btn btn-outline-warning btn-sm" onclick="showNotification('Funcionalidade em desenvolvimento', 'warning')">
+                                    <i class="fas fa-broom me-1"></i>Limpar Cache
+                                </button>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="text-center p-3">
+                                <i class="fas fa-chart-bar fa-2x text-success mb-3"></i>
+                                <h6>Relatórios do Sistema</h6>
+                                <p class="text-muted small mb-3">Estatísticas de uso</p>
+                                <button class="btn btn-outline-success btn-sm" onclick="showNotification('Funcionalidade em desenvolvimento', 'success')">
+                                    <i class="fas fa-chart-bar me-1"></i>Ver Relatórios
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

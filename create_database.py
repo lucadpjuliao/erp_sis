@@ -82,20 +82,41 @@ def run_migrations():
         os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'erp_system.settings')
         django.setup()
         
-        # Executa makemigrations
-        print("📝 Gerando migrações...")
-        execute_from_command_line(['manage.py', 'makemigrations'])
+        # Executa makemigrations apenas se necessário
+        print("📝 Verificando migrações...")
+        try:
+            execute_from_command_line(['manage.py', 'makemigrations', '--check'])
+            print("📝 Todas as migrações estão atualizadas.")
+        except SystemExit:
+            print("📝 Gerando novas migrações...")
+            execute_from_command_line(['manage.py', 'makemigrations'])
         
         # Executa migrate
         print("🚀 Aplicando migrações...")
         execute_from_command_line(['manage.py', 'migrate'])
+        
+        # Aplica migrações específicas do Django se necessário
+        print("🔧 Aplicando migrações do Django...")
+        execute_from_command_line(['manage.py', 'migrate', 'auth'])
+        execute_from_command_line(['manage.py', 'migrate', 'contenttypes'])
+        execute_from_command_line(['manage.py', 'migrate', 'sessions'])
+        execute_from_command_line(['manage.py', 'migrate', 'admin'])
+        execute_from_command_line(['manage.py', 'migrate', 'messages'])
         
         print("✅ Migrações aplicadas com sucesso!")
         return True
         
     except Exception as e:
         print(f"❌ Erro nas migrações: {e}")
-        return False
+        print("🔧 Tentando aplicar migrações básicas do Django...")
+        try:
+            # Força a aplicação das migrações básicas
+            execute_from_command_line(['manage.py', 'migrate', '--run-syncdb'])
+            print("✅ Migrações básicas aplicadas!")
+            return True
+        except Exception as e2:
+            print(f"❌ Erro crítico: {e2}")
+            return False
 
 def create_superuser():
     """Cria um superusuário padrão"""
@@ -128,27 +149,36 @@ def main():
     
     print("\n🔧 Etapa 1: Criando banco de dados...")
     if not create_database():
+        print("❌ Falha ao criar banco. Verifique as credenciais do PostgreSQL.")
         return
     
     print("\n🔧 Etapa 2: Testando conexão...")
     if not test_connection():
+        print("❌ Falha na conexão. Verifique se o PostgreSQL está rodando.")
         return
     
     print("\n🔧 Etapa 3: Executando migrações...")
     if not run_migrations():
-        return
-    
+        print("⚠️  Falha nas migrações automáticas.")
+        print("🔧 Execute manualmente:")
+        print("   python migrate_database.py")
+        print("   OU")
+        print("   python manage.py migrate --run-syncdb")
+        print("   python manage.py migrate")
+        
     print("\n🔧 Etapa 4: Criando superusuário...")
     create_superuser()
     
-    print("\n🎉 CONFIGURAÇÃO CONCLUÍDA COM SUCESSO!")
+    print("\n🎉 CONFIGURAÇÃO CONCLUÍDA!")
     print("=" * 50)
     print("💻 Para iniciar o servidor:")
     print("   python manage.py runserver")
-    print("\n🌐 Acesso admin:")
-    print("   http://127.0.0.1:8000/admin/")
-    print("   Usuário: admin")
-    print("   Senha: admin123")
+    print("\n🌐 Acessos:")
+    print("   Dashboard: http://127.0.0.1:8000/")
+    print("   Admin: http://127.0.0.1:8000/admin/")
+    print("   Usuário: admin | Senha: admin123")
+    print("\n🔧 Em caso de erro de migração:")
+    print("   python migrate_database.py")
 
 if __name__ == "__main__":
     main()
