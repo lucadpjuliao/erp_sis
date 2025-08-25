@@ -1,0 +1,290 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block title %}Dashboard - Sistema ERP{% endblock %}
+{% block page_title %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <!-- Welcome Section -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card border-start-primary">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-grow-1">
+                            <h4 class="text-gradient mb-1">Bem-vindo ao Sistema ERP!</h4>
+                            <p class="text-muted mb-0">Gerencie sua empresa de forma eficiente e moderna.</p>
+                        </div>
+                        <div class="text-end">
+                            <div class="text-muted small">{{ "now"|date:"d/m/Y H:i" }}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stats Cards Row 1 -->
+    <div class="row mb-4">
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card stats-card">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-grow-1">
+                            <div class="stats-value">{{ total_clientes }}</div>
+                            <div class="stats-label">Clientes</div>
+                        </div>
+                        <div class="stats-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card stats-card success">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-grow-1">
+                            <div class="stats-value">{{ total_fornecedores }}</div>
+                            <div class="stats-label">Fornecedores</div>
+                        </div>
+                        <div class="stats-icon">
+                            <i class="fas fa-truck"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card stats-card warning">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-grow-1">
+                            <div class="stats-value">{{ total_produtos }}</div>
+                            <div class="stats-label">Produtos</div>
+                        </div>
+                        <div class="stats-icon">
+                            <i class="fas fa-box"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card stats-card info">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-grow-1">
+                            <div class="stats-value">
+                                {% if saldo_mes >= 0 %}
+                                    <span class="text-success">+</span>
+                                {% else %}
+                                    <span class="text-danger">-</span>
+                                {% endif %}
+                            </div>
+                            <div class="stats-label">Saldo do Mês</div>
+                        </div>
+                        <div class="stats-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Financial Overview -->
+    <div class="row mb-4">
+        <div class="col-lg-8">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="fas fa-chart-bar text-primary me-2"></i>
+                        Visão Geral Financeira
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4 text-center">
+                            <div class="border-end">
+                                <h3 class="text-success">R$ {{ receitas_mes|floatformat:2 }}</h3>
+                                <p class="text-muted mb-0">Receitas do Mês</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4 text-center">
+                            <div class="border-end">
+                                <h3 class="text-danger">R$ {{ despesas_mes|floatformat:2 }}</h3>
+                                <p class="text-muted mb-0">Despesas do Mês</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4 text-center">
+                            <h3 class="{% if saldo_mes >= 0 %}text-success{% else %}text-danger{% endif %}">
+                                R$ {{ saldo_mes|floatformat:2 }}
+                            </h3>
+                            <p class="text-muted mb-0">Saldo Líquido</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="fas fa-exclamation-triangle text-warning me-2"></i>
+                        Alertas
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-warning border-start-warning mb-3" role="alert">
+                        <div class="d-flex align-items-center">
+                            <i class="fas fa-clock me-2"></i>
+                            <div>
+                                <strong>{{ contas_receber_atraso }}</strong> contas a receber em atraso
+                            </div>
+                        </div>
+                    </div>
+                    <div class="alert alert-danger border-start-danger mb-0" role="alert">
+                        <div class="d-flex align-items-center">
+                            <i class="fas fa-exclamation-circle me-2"></i>
+                            <div>
+                                <strong>{{ contas_pagar_atraso }}</strong> contas a pagar em atraso
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Accounts Overview -->
+    <div class="row mb-4">
+        <div class="col-lg-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="fas fa-arrow-down text-success me-2"></i>
+                        Contas a Receber (Próximos 30 dias)
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="text-center">
+                        <h2 class="text-success mb-2">R$ {{ contas_receber_mes|floatformat:2 }}</h2>
+                        <p class="text-muted">Total a receber este mês</p>
+                        <a href="#" class="btn btn-outline-success btn-sm">
+                            <i class="fas fa-list me-1"></i> Ver Detalhes
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="fas fa-arrow-up text-danger me-2"></i>
+                        Contas a Pagar (Próximos 30 dias)
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="text-center">
+                        <h2 class="text-danger mb-2">R$ {{ contas_pagar_mes|floatformat:2 }}</h2>
+                        <p class="text-muted">Total a pagar este mês</p>
+                        <a href="#" class="btn btn-outline-danger btn-sm">
+                            <i class="fas fa-list me-1"></i> Ver Detalhes
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="fas fa-bolt text-warning me-2"></i>
+                        Ações Rápidas
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-lg-3 col-md-6 mb-3">
+                            <a href="#" class="btn btn-outline-primary w-100 p-3">
+                                <i class="fas fa-user-plus fa-2x mb-2"></i><br>
+                                Novo Cliente
+                            </a>
+                        </div>
+                        <div class="col-lg-3 col-md-6 mb-3">
+                            <a href="#" class="btn btn-outline-success w-100 p-3">
+                                <i class="fas fa-truck fa-2x mb-2"></i><br>
+                                Novo Fornecedor
+                            </a>
+                        </div>
+                        <div class="col-lg-3 col-md-6 mb-3">
+                            <a href="#" class="btn btn-outline-warning w-100 p-3">
+                                <i class="fas fa-box fa-2x mb-2"></i><br>
+                                Novo Produto
+                            </a>
+                        </div>
+                        <div class="col-lg-3 col-md-6 mb-3">
+                            <a href="#" class="btn btn-outline-info w-100 p-3">
+                                <i class="fas fa-file-invoice-dollar fa-2x mb-2"></i><br>
+                                Nova Conta
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Animação dos números dos stats cards
+    const statsValues = document.querySelectorAll('.stats-value');
+    statsValues.forEach(element => {
+        const finalValue = parseInt(element.textContent);
+        if (!isNaN(finalValue)) {
+            animateNumber(element, 0, finalValue, 1000);
+        }
+    });
+    
+    // Atualizar dados a cada 5 minutos
+    setInterval(function() {
+        // Aqui poderia fazer uma requisição AJAX para atualizar os dados
+        console.log('Atualizando dados do dashboard...');
+    }, 300000); // 5 minutos
+});
+
+function animateNumber(element, start, end, duration) {
+    const startTime = performance.now();
+    
+    function update(currentTime) {
+        const elapsed = currentTime - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        
+        const current = Math.floor(start + (end - start) * progress);
+        element.textContent = current;
+        
+        if (progress < 1) {
+            requestAnimationFrame(update);
+        }
+    }
+    
+    requestAnimationFrame(update);
+}
+</script>
+{% endblock %}

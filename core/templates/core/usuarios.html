@@ -1,0 +1,271 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block title %}Usuários - Sistema ERP{% endblock %}
+{% block page_title %}Usuários{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h4 class="text-gradient mb-0">Gestão de Usuários</h4>
+                    <p class="text-muted">Gerencie usuários e permissões do sistema.</p>
+                </div>
+                <a href="/admin/auth/user/add/" class="btn btn-primary">
+                    <i class="fas fa-user-plus me-2"></i>Novo Usuário
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-4">
+        <!-- Stats Cards -->
+        <div class="col-lg-3 col-md-6 mb-4">
+            <div class="card stats-card">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-grow-1">
+                            <div class="stats-value" id="totalUsers">-</div>
+                            <div class="stats-label">Total de Usuários</div>
+                        </div>
+                        <div class="stats-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-3 col-md-6 mb-4">
+            <div class="card stats-card success">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-grow-1">
+                            <div class="stats-value" id="activeUsers">-</div>
+                            <div class="stats-label">Usuários Ativos</div>
+                        </div>
+                        <div class="stats-icon">
+                            <i class="fas fa-user-check"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-3 col-md-6 mb-4">
+            <div class="card stats-card warning">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-grow-1">
+                            <div class="stats-value" id="staffUsers">-</div>
+                            <div class="stats-label">Administradores</div>
+                        </div>
+                        <div class="stats-icon">
+                            <i class="fas fa-user-shield"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-3 col-md-6 mb-4">
+            <div class="card stats-card info">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-grow-1">
+                            <div class="stats-value" id="onlineUsers">-</div>
+                            <div class="stats-label">Online Hoje</div>
+                        </div>
+                        <div class="stats-icon">
+                            <i class="fas fa-circle text-success"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Gestão de Usuários -->
+        <div class="col-lg-8 mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="fas fa-users text-primary me-2"></i>
+                        Usuários do Sistema
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="list-group list-group-flush">
+                        <a href="/admin/auth/user/" class="list-group-item list-group-item-action">
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-users text-muted me-3"></i>
+                                <div class="flex-grow-1">
+                                    <h6 class="mb-1">Gerenciar Usuários</h6>
+                                    <p class="mb-0 text-muted small">Criar, editar e remover usuários</p>
+                                </div>
+                                <i class="fas fa-chevron-right text-muted"></i>
+                            </div>
+                        </a>
+                        <a href="/admin/auth/user/add/" class="list-group-item list-group-item-action">
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-user-plus text-muted me-3"></i>
+                                <div class="flex-grow-1">
+                                    <h6 class="mb-1">Novo Usuário</h6>
+                                    <p class="mb-0 text-muted small">Cadastrar novo usuário no sistema</p>
+                                </div>
+                                <i class="fas fa-chevron-right text-muted"></i>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Grupos e Permissões -->
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="fas fa-users-cog text-success me-2"></i>
+                        Grupos e Permissões
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="list-group list-group-flush">
+                        <a href="/admin/auth/group/" class="list-group-item list-group-item-action">
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-layer-group text-muted me-3"></i>
+                                <div class="flex-grow-1">
+                                    <h6 class="mb-1">Gerenciar Grupos</h6>
+                                    <p class="mb-0 text-muted small">Criar e editar grupos de usuários</p>
+                                </div>
+                                <i class="fas fa-chevron-right text-muted"></i>
+                            </div>
+                        </a>
+                        <a href="/admin/auth/permission/" class="list-group-item list-group-item-action">
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-key text-muted me-3"></i>
+                                <div class="flex-grow-1">
+                                    <h6 class="mb-1">Permissões</h6>
+                                    <p class="mb-0 text-muted small">Controlar acesso às funcionalidades</p>
+                                </div>
+                                <i class="fas fa-chevron-right text-muted"></i>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="col-lg-4 mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="fas fa-bolt text-warning me-2"></i>
+                        Ações Rápidas
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-grid gap-3">
+                        <a href="/admin/auth/user/add/" class="btn btn-outline-primary">
+                            <i class="fas fa-user-plus me-2"></i>Novo Usuário
+                        </a>
+                        <a href="/admin/auth/group/add/" class="btn btn-outline-success">
+                            <i class="fas fa-users-cog me-2"></i>Novo Grupo
+                        </a>
+                        <button class="btn btn-outline-info" onclick="loadUserStats()">
+                            <i class="fas fa-sync me-2"></i>Atualizar Estatísticas
+                        </button>
+                        <button class="btn btn-outline-warning" onclick="showNotification('Funcionalidade em desenvolvimento', 'warning')">
+                            <i class="fas fa-chart-bar me-2"></i>Relatório de Acesso
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sistema Info -->
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="fas fa-info-circle text-info me-2"></i>
+                        Informações
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <small class="text-muted d-block">Usuário Atual</small>
+                        <div class="d-flex align-items-center">
+                            <div class="user-avatar me-2" style="width: 32px; height: 32px; background: var(--primary-color); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 0.875rem;">
+                                {{ user.first_name|first|default:user.username|first|upper }}
+                            </div>
+                            <div>
+                                <div class="fw-medium">{{ user.get_full_name|default:user.username }}</div>
+                                <small class="text-muted">{{ user.email }}</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <small class="text-muted d-block">Status</small>
+                        <span class="badge bg-success">Administrador</span>
+                    </div>
+
+                    <div class="mb-3">
+                        <small class="text-muted d-block">Último Login</small>
+                        <span>{{ user.last_login|date:"d/m/Y H:i"|default:"—" }}</span>
+                    </div>
+
+                    <div>
+                        <small class="text-muted d-block">Membro desde</small>
+                        <span>{{ user.date_joined|date:"d/m/Y" }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    loadUserStats();
+});
+
+function loadUserStats() {
+    // Simular dados (em produção seria uma chamada AJAX)
+    const stats = {
+        total: Math.floor(Math.random() * 50) + 10,
+        active: Math.floor(Math.random() * 40) + 8,
+        staff: Math.floor(Math.random() * 5) + 2,
+        online: Math.floor(Math.random() * 10) + 1
+    };
+
+    // Animar números
+    animateNumber(document.getElementById('totalUsers'), 0, stats.total, 1000);
+    animateNumber(document.getElementById('activeUsers'), 0, stats.active, 1200);
+    animateNumber(document.getElementById('staffUsers'), 0, stats.staff, 800);
+    animateNumber(document.getElementById('onlineUsers'), 0, stats.online, 600);
+}
+
+function animateNumber(element, start, end, duration) {
+    const startTime = performance.now();
+    
+    function update(currentTime) {
+        const elapsed = currentTime - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        
+        const current = Math.floor(start + (end - start) * progress);
+        element.textContent = current;
+        
+        if (progress < 1) {
+            requestAnimationFrame(update);
+        }
+    }
+    
+    requestAnimationFrame(update);
+}
+</script>
+{% endblock %}

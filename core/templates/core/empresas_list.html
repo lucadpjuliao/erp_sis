@@ -1,0 +1,100 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block title %}Empresas - Sistema ERP{% endblock %}
+{% block page_title %}Empresas{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center">
+                <h4 class="text-gradient mb-0">Gestão de Empresas</h4>
+                <a href="/admin/core/empresa/add/" class="btn btn-primary">
+                    <i class="fas fa-plus me-2"></i>Nova Empresa
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        {% for empresa in empresas %}
+        <div class="col-lg-6 col-xl-4 mb-4">
+            <div class="card h-100">
+                <div class="card-body">
+                    <div class="d-flex align-items-start mb-3">
+                        <div class="flex-grow-1">
+                            <h5 class="card-title mb-1">{{ empresa.nome }}</h5>
+                            <p class="text-muted small mb-0">{{ empresa.razao_social }}</p>
+                        </div>
+                        <div class="badge bg-{{ empresa.matriz|yesno:'primary,secondary' }}">
+                            {{ empresa.matriz|yesno:'Matriz,Filial' }}
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <div class="row g-2">
+                            <div class="col-6">
+                                <small class="text-muted d-block">CNPJ</small>
+                                <span class="fw-medium">{{ empresa.cnpj }}</span>
+                            </div>
+                            <div class="col-6">
+                                <small class="text-muted d-block">IE</small>
+                                <span class="fw-medium">{{ empresa.inscricao_estadual|default:'—' }}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    {% if empresa.telefone %}
+                    <div class="mb-2">
+                        <i class="fas fa-phone text-muted me-2"></i>
+                        <span>{{ empresa.telefone }}</span>
+                    </div>
+                    {% endif %}
+
+                    {% if empresa.email %}
+                    <div class="mb-2">
+                        <i class="fas fa-envelope text-muted me-2"></i>
+                        <span>{{ empresa.email }}</span>
+                    </div>
+                    {% endif %}
+
+                    {% if empresa.site %}
+                    <div class="mb-3">
+                        <i class="fas fa-globe text-muted me-2"></i>
+                        <a href="{{ empresa.site }}" target="_blank" class="text-decoration-none">{{ empresa.site }}</a>
+                    </div>
+                    {% endif %}
+                </div>
+                <div class="card-footer bg-light">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <small class="text-muted">
+                            <i class="fas fa-calendar me-1"></i>
+                            {{ empresa.created_at|date:"d/m/Y" }}
+                        </small>
+                        <div>
+                            <a href="/admin/core/empresa/{{ empresa.pk }}/change/" class="btn btn-sm btn-outline-primary">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body text-center py-5">
+                    <i class="fas fa-building fa-3x text-muted mb-3"></i>
+                    <h5 class="text-muted">Nenhuma empresa cadastrada</h5>
+                    <p class="text-muted">Comece cadastrando sua primeira empresa.</p>
+                    <a href="/admin/core/empresa/add/" class="btn btn-primary">
+                        <i class="fas fa-plus me-2"></i>Cadastrar Empresa
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

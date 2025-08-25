@@ -26,7 +26,16 @@ admin.site.index_title = 'Administração do Sistema ERP'
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/', include('core.urls')),
+    
+    # Interface principal
+    path('', include('core.urls')),
+    
+    # Módulos principais
+    path('financeiro/', include('financeiro.urls')),
+    path('operacional/', include('operacional.urls')),
+    
+    # APIs
+    path('api/core/', include('core.urls')),
     path('api/financeiro/', include('financeiro.urls')),
     path('api/operacional/', include('operacional.urls')),
 ]
