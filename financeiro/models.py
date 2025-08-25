@@ -18,6 +18,7 @@ class PlanoContas(BaseModel):
     ], verbose_name='Tipo')
     nivel = models.PositiveIntegerField(default=1, verbose_name='Nível')
     aceita_lancamento = models.BooleanField(default=True, verbose_name='Aceita Lançamento')
+    empresa = models.ForeignKey(Empresa, on_delete=models.CASCADE, verbose_name='Empresa')
 
     class Meta:
         verbose_name = 'Plano de Contas'
@@ -33,6 +34,8 @@ class CentroCusto(BaseModel):
     codigo = models.CharField(max_length=20, unique=True, verbose_name='Código')
     nome = models.CharField(max_length=200, verbose_name='Nome')
     descricao = models.TextField(blank=True, verbose_name='Descrição')
+    pai = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True,
+                           related_name='filhos', verbose_name='Centro Pai')
     empresa = models.ForeignKey(Empresa, on_delete=models.CASCADE, verbose_name='Empresa')
 
     class Meta:
@@ -44,9 +47,23 @@ class CentroCusto(BaseModel):
         return f"{self.codigo} - {self.nome}"
 
 
+class Banco(BaseModel):
+    """Bancos"""
+    codigo = models.CharField(max_length=10, unique=True, verbose_name='Código')
+    nome = models.CharField(max_length=100, verbose_name='Nome')
+    
+    class Meta:
+        verbose_name = 'Banco'
+        verbose_name_plural = 'Bancos'
+        ordering = ['codigo']
+
+    def __str__(self):
+        return f"{self.codigo} - {self.nome}"
+
+
 class ContasBancarias(BaseModel):
     """Contas Bancárias"""
-    banco = models.CharField(max_length=100, verbose_name='Banco')
+    banco = models.ForeignKey(Banco, on_delete=models.PROTECT, verbose_name='Banco')
     agencia = models.CharField(max_length=10, verbose_name='Agência')
     conta = models.CharField(max_length=20, verbose_name='Conta')
     digito = models.CharField(max_length=2, verbose_name='Dígito')
@@ -62,10 +79,10 @@ class ContasBancarias(BaseModel):
     class Meta:
         verbose_name = 'Conta Bancária'
         verbose_name_plural = 'Contas Bancárias'
-        ordering = ['banco', 'agencia', 'conta']
+        ordering = ['banco__nome', 'agencia', 'conta']
 
     def __str__(self):
-        return f"{self.banco} - {self.agencia}/{self.conta}-{self.digito}"
+        return f"{self.banco.nome} - {self.agencia}/{self.conta}-{self.digito}"
 
 
 class FormaPagamento(BaseModel):
@@ -96,7 +113,7 @@ class FormaPagamento(BaseModel):
 class ContasReceber(BaseModel):
     """Contas a Receber"""
     numero_documento = models.CharField(max_length=50, verbose_name='Número do Documento')
-    cliente = models.CharField(max_length=200, verbose_name='Cliente')  # Será FK quando criar módulo de clientes
+    cliente = models.ForeignKey('operacional.Cliente', on_delete=models.PROTECT, verbose_name='Cliente')
     data_vencimento = models.DateField(verbose_name='Data de Vencimento')
     data_emissao = models.DateField(verbose_name='Data de Emissão')
     valor_original = models.DecimalField(max_digits=15, decimal_places=2, verbose_name='Valor Original')
@@ -117,6 +134,8 @@ class ContasReceber(BaseModel):
     conta_contabil = models.ForeignKey(PlanoContas, on_delete=models.PROTECT, verbose_name='Conta Contábil')
     centro_custo = models.ForeignKey(CentroCusto, on_delete=models.PROTECT, verbose_name='Centro de Custo')
     forma_pagamento = models.ForeignKey(FormaPagamento, on_delete=models.PROTECT, verbose_name='Forma de Pagamento')
+    conta_bancaria = models.ForeignKey(ContasBancarias, on_delete=models.PROTECT, null=True, blank=True,
+                                     verbose_name='Conta Bancária')
     empresa = models.ForeignKey(Empresa, on_delete=models.CASCADE, verbose_name='Empresa')
 
     class Meta:
@@ -125,7 +144,7 @@ class ContasReceber(BaseModel):
         ordering = ['-data_vencimento']
 
     def __str__(self):
-        return f"{self.numero_documento} - {self.cliente}"
+        return f"{self.numero_documento} - {self.cliente.pessoa.nome}"
 
     @property
     def valor_total(self):
@@ -135,7 +154,7 @@ class ContasReceber(BaseModel):
 class ContasPagar(BaseModel):
     """Contas a Pagar"""
     numero_documento = models.CharField(max_length=50, verbose_name='Número do Documento')
-    fornecedor = models.CharField(max_length=200, verbose_name='Fornecedor')  # Será FK quando criar módulo de fornecedores
+    fornecedor = models.ForeignKey('operacional.Fornecedor', on_delete=models.PROTECT, verbose_name='Fornecedor')
     data_vencimento = models.DateField(verbose_name='Data de Vencimento')
     data_emissao = models.DateField(verbose_name='Data de Emissão')
     valor_original = models.DecimalField(max_digits=15, decimal_places=2, verbose_name='Valor Original')
@@ -166,7 +185,7 @@ class ContasPagar(BaseModel):
         ordering = ['-data_vencimento']
 
     def __str__(self):
-        return f"{self.numero_documento} - {self.fornecedor}"
+        return f"{self.numero_documento} - {self.fornecedor.pessoa.nome}"
 
     @property
     def valor_total(self):
